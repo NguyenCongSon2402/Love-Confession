@@ -65,7 +65,7 @@ body{
 }
 
 .heart-svg{
-    width:200px;
+    width:clamp(120px,25vh,200px);
     cursor:pointer;
     animation:beat 1.2s infinite;
     filter:drop-shadow(0 0 30px rgba(255,255,255,0.8))
@@ -80,7 +80,6 @@ body{
     100%{transform:scale(1)}
 }
 
-/* Flying hearts */
 .flying-heart{
     position:absolute;
     font-size:18px;
@@ -95,7 +94,6 @@ body{
     }
 }
 
-/* Sparkle */
 .sparkle{
     position:absolute;
     width:6px;
@@ -113,7 +111,6 @@ body{
     }
 }
 
-/* Petal */
 .petal{
     position:absolute;
     font-size:20px;
@@ -136,9 +133,13 @@ body{
     opacity:0;
     transition:1.5s ease;
     text-align:center;
-    width:90%;
+    width:92%;
     max-width:900px;
-    padding:50px;
+    padding:clamp(20px,4vh,50px);
+    height:90vh;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
     backdrop-filter:blur(15px);
     background:rgba(255,255,255,0.15);
     border-radius:30px;
@@ -147,27 +148,30 @@ body{
 
 .container.show{opacity:1}
 
-h1{font-size:40px;margin-bottom:25px}
+h1{
+    font-size:clamp(22px,5vh,40px);
+    margin-bottom:clamp(15px,2vh,25px);
+}
 
 .text{
-    font-size:22px;
-    line-height:1.9;
-    min-height:220px;
+    font-size:clamp(14px,2.8vh,22px);
+    line-height:1.6;
+    min-height:clamp(120px,25vh,220px);
 }
 
 .cursor{animation:blink 1s infinite}
 @keyframes blink{0%,50%,100%{opacity:1}25%,75%{opacity:0}}
 
 .images{
-    margin-top:40px;
+    margin-top:clamp(20px,3vh,40px);
     display:flex;
     justify-content:center;
-    gap:60px;
+    gap:clamp(20px,5vw,60px);
 }
 
 .images img{
-    width:220px;
-    height:220px;
+    width:clamp(100px,20vh,220px);
+    height:clamp(100px,20vh,220px);
     object-fit:cover;
     border-radius:25px;
     transition:0.6s;
@@ -177,9 +181,9 @@ h1{font-size:40px;margin-bottom:25px}
 .images img:hover{transform:scale(1.08)}
 
 button{
-    margin-top:40px;
-    padding:15px 45px;
-    font-size:18px;
+    margin-top:clamp(20px,3vh,40px);
+    padding:clamp(10px,2vh,15px) clamp(25px,4vh,45px);
+    font-size:clamp(14px,2.5vh,18px);
     border:none;
     border-radius:40px;
     background:linear-gradient(45deg,#ff4d88,#ff99ac);
@@ -189,8 +193,6 @@ button{
 }
 
 button:hover{transform:scale(1.1)}
-
-/* ================= FINAL ================= */
 
 .final-screen{
     position:fixed;
@@ -213,17 +215,17 @@ button:hover{transform:scale(1.1)}
 }
 
 .final-screen h1{
-    font-size:42px;
+    font-size:clamp(24px,6vh,42px);
     margin-bottom:20px;
 }
 </style>
 </head>
+
 <body>
 
 <div class="intro" id="intro">
     <div class="aura"></div>
     <div class="ring"></div>
-
     <svg class="heart-svg" onclick="openLove()" viewBox="0 0 32 29.6">
         <path fill="#ff1e56" d="M23.6,0c-3.4,0-6.4,2-7.6,5C14.8,2,11.8,0,8.4,0
         C3.8,0,0,3.8,0,8.4c0,9.5,16,21.2,16,21.2s16-11.7,16-21.2
@@ -255,12 +257,7 @@ button:hover{transform:scale(1.1)}
 </audio>
 
 <script>
-
-/* Tim + sparkle */
-setInterval(()=>{
-    shootHearts();
-    shootSparkles();
-},1200);
+setInterval(()=>{shootHearts();shootSparkles();},1200);
 
 function shootHearts(){
     const intro=document.getElementById("intro");
@@ -270,15 +267,10 @@ function shootHearts(){
         h.innerHTML="💗";
         h.style.left="50%";
         h.style.top="50%";
-
         let angle=Math.random()*2*Math.PI;
         let distance=150+Math.random()*200;
-        let x=Math.cos(angle)*distance+"px";
-        let y=Math.sin(angle)*distance+"px";
-
-        h.style.setProperty("--x",x);
-        h.style.setProperty("--y",y);
-
+        h.style.setProperty("--x",Math.cos(angle)*distance+"px");
+        h.style.setProperty("--y",Math.sin(angle)*distance+"px");
         intro.appendChild(h);
         setTimeout(()=>h.remove(),1600);
     }
@@ -291,15 +283,10 @@ function shootSparkles(){
         s.className="sparkle";
         s.style.left="50%";
         s.style.top="50%";
-
         let angle=Math.random()*2*Math.PI;
         let distance=200+Math.random()*200;
-        let x=Math.cos(angle)*distance+"px";
-        let y=Math.sin(angle)*distance+"px";
-
-        s.style.setProperty("--x",x);
-        s.style.setProperty("--y",y);
-
+        s.style.setProperty("--x",Math.cos(angle)*distance+"px");
+        s.style.setProperty("--y",Math.sin(angle)*distance+"px");
         intro.appendChild(s);
         setTimeout(()=>s.remove(),2000);
     }
@@ -317,15 +304,11 @@ setInterval(()=>{
 function openLove(){
     document.getElementById("intro").classList.add("hide");
     document.getElementById("main").classList.add("show");
-
-    const music=document.getElementById("bgMusic");
-    music.volume=0.5;
-    music.play();
-
+    document.getElementById("bgMusic").play();
     typeEffect();
 }
 
-const message = [
+const message=[
 "Ngày anh xin phép cả thế giới để làm quen em…",
 "anh không ngờ rằng mình sẽ thích em nhiều đến vậy.",
 "Mọi thứ bắt đầu chỉ từ một lời chào,",
@@ -361,22 +344,13 @@ function acceptedLove(){
         h.innerHTML="💖";
         h.style.left=Math.random()*100+"vw";
         h.style.top=Math.random()*100+"vh";
-
-        let x=(Math.random()-0.5)*600+"px";
-        let y=(Math.random()-0.5)*600+"px";
-
-        h.style.setProperty("--x",x);
-        h.style.setProperty("--y",y);
-
+        h.style.setProperty("--x",(Math.random()-0.5)*600+"px");
+        h.style.setProperty("--y",(Math.random()-0.5)*600+"px");
         document.body.appendChild(h);
         setTimeout(()=>h.remove(),2000);
     }
-
-    setTimeout(()=>{
-        document.getElementById("finalScreen").classList.add("show");
-    },800);
+    setTimeout(()=>{document.getElementById("finalScreen").classList.add("show");},800);
 }
-
 </script>
 
 </body>
