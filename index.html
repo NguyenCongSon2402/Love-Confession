@@ -72,7 +72,6 @@ body{
            drop-shadow(0 0 60px rgba(255,20,147,0.9));
 }
 
-/* Nhịp tim */
 @keyframes beat{
     0%{transform:scale(1)}
     25%{transform:scale(1.15)}
@@ -81,12 +80,19 @@ body{
     100%{transform:scale(1)}
 }
 
-/* Tim nhỏ bay */
+/* Flying hearts */
 .flying-heart{
     position:absolute;
     font-size:18px;
     pointer-events:none;
     animation:fly 1.6s ease-out forwards;
+}
+
+@keyframes fly{
+    to{
+        transform:translate(var(--x), var(--y)) scale(0.4);
+        opacity:0;
+    }
 }
 
 /* Sparkle */
@@ -119,13 +125,6 @@ body{
     100%{transform:translateY(600px) rotate(360deg); opacity:0}
 }
 
-@keyframes fly{
-    to{
-        transform:translate(var(--x), var(--y)) scale(0.4);
-        opacity:0;
-    }
-}
-
 .intro.hide{
     opacity:0;
     visibility:hidden;
@@ -148,10 +147,7 @@ body{
 
 .container.show{opacity:1}
 
-h1{
-    font-size:40px;
-    margin-bottom:25px;
-}
+h1{font-size:40px;margin-bottom:25px}
 
 .text{
     font-size:22px;
@@ -159,14 +155,8 @@ h1{
     min-height:220px;
 }
 
-.cursor{
-    animation:blink 1s infinite;
-}
-
-@keyframes blink{
-    0%,50%,100%{opacity:1}
-    25%,75%{opacity:0}
-}
+.cursor{animation:blink 1s infinite}
+@keyframes blink{0%,50%,100%{opacity:1}25%,75%{opacity:0}}
 
 .images{
     margin-top:40px;
@@ -184,9 +174,7 @@ h1{
     box-shadow:0 20px 40px rgba(0,0,0,0.3);
 }
 
-.images img:hover{
-    transform:scale(1.08);
-}
+.images img:hover{transform:scale(1.08)}
 
 button{
     margin-top:40px;
@@ -202,6 +190,32 @@ button{
 
 button:hover{transform:scale(1.1)}
 
+/* ================= FINAL ================= */
+
+.final-screen{
+    position:fixed;
+    inset:0;
+    background:radial-gradient(circle,#ff4d88,#c9184a);
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    opacity:0;
+    visibility:hidden;
+    transition:1s ease;
+    z-index:20;
+}
+
+.final-screen.show{
+    opacity:1;
+    visibility:visible;
+}
+
+.final-screen h1{
+    font-size:42px;
+    margin-bottom:20px;
+}
 </style>
 </head>
 <body>
@@ -210,7 +224,7 @@ button:hover{transform:scale(1.1)}
     <div class="aura"></div>
     <div class="ring"></div>
 
-    <svg class="heart-svg" id="mainHeart" onclick="openLove()" viewBox="0 0 32 29.6">
+    <svg class="heart-svg" onclick="openLove()" viewBox="0 0 32 29.6">
         <path fill="#ff1e56" d="M23.6,0c-3.4,0-6.4,2-7.6,5C14.8,2,11.8,0,8.4,0
         C3.8,0,0,3.8,0,8.4c0,9.5,16,21.2,16,21.2s16-11.7,16-21.2
         C32,3.8,28.2,0,23.6,0z"/>
@@ -228,13 +242,21 @@ button:hover{transform:scale(1.1)}
         <img src="em.jpg">
     </div>
 
-    <button>Đồng ý 💕</button>
+    <button onclick="acceptedLove()">Đồng ý 💕</button>
 </div>
+
+<div class="final-screen" id="finalScreen">
+    <h1>Chính thức thuộc về nhau rồi 💍</h1>
+    <p>Từ hôm nay, anh có danh phận nhé 😌💗</p>
+</div>
+
+<audio id="bgMusic" loop>
+    <source src="music.mp3" type="audio/mpeg">
+</audio>
 
 <script>
 
-/* ===== BẮN TIM + SPARKLE ===== */
-
+/* Tim + sparkle */
 setInterval(()=>{
     shootHearts();
     shootSparkles();
@@ -262,7 +284,6 @@ function shootHearts(){
     }
 }
 
-/* Sparkle */
 function shootSparkles(){
     const intro=document.getElementById("intro");
     for(let i=0;i<15;i++){
@@ -284,7 +305,6 @@ function shootSparkles(){
     }
 }
 
-/* Petal fall background */
 setInterval(()=>{
     let p=document.createElement("div");
     p.className="petal";
@@ -294,17 +314,16 @@ setInterval(()=>{
     setTimeout(()=>p.remove(),4000);
 },800);
 
-
-/* ===== MỞ CẢNH ===== */
-
 function openLove(){
     document.getElementById("intro").classList.add("hide");
     document.getElementById("main").classList.add("show");
+
+    const music=document.getElementById("bgMusic");
+    music.volume=0.5;
+    music.play();
+
     typeEffect();
 }
-
-
-/* ===== Typing ===== */
 
 const message=[
 "Anh không biết mình có phải là người thú vị nhất,",
@@ -314,7 +333,8 @@ const message=[
 "và cả cách em xuất hiện rất tự nhiên trong suy nghĩ của anh.",
 "",
 "Nếu em cũng cảm nhận được điều gì đó giống anh…",
-"thì mình thử cho nhau một cơ hội nhé."
+"",
+"Làm người yêu anh nhé? 💗"
 ];
 
 let line=0,char=0;
@@ -331,6 +351,29 @@ function typeEffect(){
             setTimeout(typeEffect,600);
         }
     }
+}
+
+function acceptedLove(){
+    for(let i=0;i<60;i++){
+        let h=document.createElement("div");
+        h.className="flying-heart";
+        h.innerHTML="💖";
+        h.style.left=Math.random()*100+"vw";
+        h.style.top=Math.random()*100+"vh";
+
+        let x=(Math.random()-0.5)*600+"px";
+        let y=(Math.random()-0.5)*600+"px";
+
+        h.style.setProperty("--x",x);
+        h.style.setProperty("--y",y);
+
+        document.body.appendChild(h);
+        setTimeout(()=>h.remove(),2000);
+    }
+
+    setTimeout(()=>{
+        document.getElementById("finalScreen").classList.add("show");
+    },800);
 }
 
 </script>
