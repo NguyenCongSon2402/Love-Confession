@@ -2,48 +2,61 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <title>For You 💗</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
 
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+
+html{height:-webkit-fill-available}
 
 body{
     font-family:'Playfair Display', serif;
-    height:100vh;
-    overflow:hidden;
-    display:flex;
-    justify-content:center;
-    align-items:center;
+    min-height:100vh;
+    min-height:-webkit-fill-available;
     background:radial-gradient(circle at center,#ff8fab,#ff4d88,#c9184a);
     color:white;
+    overflow-x:hidden;
+    overscroll-behavior:none;
 }
 
 /* ================= INTRO ================= */
 
 .intro{
-    position:absolute;
-    inset:0;
+    position:fixed;
+    top:0;left:0;right:0;bottom:0;
+    display:-webkit-flex;
     display:flex;
+    -webkit-justify-content:center;
     justify-content:center;
+    -webkit-align-items:center;
     align-items:center;
     background:radial-gradient(circle,#ffb3d9,#ff4d88);
     overflow:hidden;
     z-index:10;
+    -webkit-transition:1.2s ease;
     transition:1.2s ease;
 }
 
 .aura{
     position:absolute;
-    width:400px;
-    height:400px;
+    width:clamp(160px,50vmin,400px);
+    height:clamp(160px,50vmin,400px);
     border-radius:50%;
     background:radial-gradient(circle,rgba(255,255,255,0.8),transparent);
+    -webkit-animation:pulseAura 3s infinite ease-in-out;
     animation:pulseAura 3s infinite ease-in-out;
 }
 
+@-webkit-keyframes pulseAura{
+    0%{-webkit-transform:scale(0.8);opacity:0.6}
+    50%{-webkit-transform:scale(1.2);opacity:1}
+    100%{-webkit-transform:scale(0.8);opacity:0.6}
+}
 @keyframes pulseAura{
     0%{transform:scale(0.8);opacity:0.6}
     50%{transform:scale(1.2);opacity:1}
@@ -52,26 +65,42 @@ body{
 
 .ring{
     position:absolute;
-    width:450px;
-    height:450px;
+    width:clamp(200px,62vmin,450px);
+    height:clamp(200px,62vmin,450px);
     border-radius:50%;
     border:2px solid rgba(255,255,255,0.4);
+    -webkit-animation:rotateRing 12s linear infinite;
     animation:rotateRing 12s linear infinite;
 }
 
+@-webkit-keyframes rotateRing{
+    from{-webkit-transform:rotate(0deg)}
+    to{-webkit-transform:rotate(360deg)}
+}
 @keyframes rotateRing{
     from{transform:rotate(0deg)}
     to{transform:rotate(360deg)}
 }
 
 .heart-svg{
-    width:clamp(120px,25vh,200px);
+    width:clamp(80px,18vmin,200px);
     cursor:pointer;
+    -webkit-animation:beat 1.2s infinite;
     animation:beat 1.2s infinite;
-    filter:drop-shadow(0 0 30px rgba(255,255,255,0.8))
-           drop-shadow(0 0 60px rgba(255,20,147,0.9));
+    -webkit-filter:drop-shadow(0 0 30px rgba(255,255,255,0.8)) drop-shadow(0 0 60px rgba(255,20,147,0.9));
+    filter:drop-shadow(0 0 30px rgba(255,255,255,0.8)) drop-shadow(0 0 60px rgba(255,20,147,0.9));
+    position:relative;
+    z-index:2;
+    padding:15px;
 }
 
+@-webkit-keyframes beat{
+    0%{-webkit-transform:scale(1)}
+    25%{-webkit-transform:scale(1.15)}
+    40%{-webkit-transform:scale(1)}
+    60%{-webkit-transform:scale(1.1)}
+    100%{-webkit-transform:scale(1)}
+}
 @keyframes beat{
     0%{transform:scale(1)}
     25%{transform:scale(1.15)}
@@ -84,127 +113,219 @@ body{
     position:absolute;
     font-size:18px;
     pointer-events:none;
+    -webkit-animation:fly 1.6s ease-out forwards;
     animation:fly 1.6s ease-out forwards;
 }
 
+@-webkit-keyframes fly{
+    to{-webkit-transform:translate(var(--x),var(--y)) scale(0.4);opacity:0}
+}
 @keyframes fly{
-    to{
-        transform:translate(var(--x), var(--y)) scale(0.4);
-        opacity:0;
-    }
+    to{transform:translate(var(--x),var(--y)) scale(0.4);opacity:0}
 }
 
 .sparkle{
     position:absolute;
-    width:6px;
-    height:6px;
+    width:6px;height:6px;
     background:white;
     border-radius:50%;
     box-shadow:0 0 10px white,0 0 20px pink;
+    -webkit-animation:sparkleMove 2s linear forwards;
     animation:sparkleMove 2s linear forwards;
 }
 
+@-webkit-keyframes sparkleMove{
+    to{-webkit-transform:translate(var(--x),var(--y)) scale(0.3);opacity:0}
+}
 @keyframes sparkleMove{
-    to{
-        transform:translate(var(--x), var(--y)) scale(0.3);
-        opacity:0;
-    }
+    to{transform:translate(var(--x),var(--y)) scale(0.3);opacity:0}
 }
 
 .petal{
-    position:absolute;
+    position:fixed;
     font-size:20px;
-    animation:fall 4s linear forwards;
+    pointer-events:none;
+    z-index:6;
+    -webkit-animation:fall linear forwards;
+    animation:fall linear forwards;
 }
 
+@-webkit-keyframes fall{
+    0%{-webkit-transform:translateY(-50px) rotate(0deg) translateX(0);opacity:1}
+    50%{-webkit-transform:translateY(50vh) rotate(180deg) translateX(-30px)}
+    100%{-webkit-transform:translateY(110vh) rotate(360deg) translateX(0);opacity:0}
+}
 @keyframes fall{
-    0%{transform:translateY(-50px) rotate(0deg); opacity:1}
-    100%{transform:translateY(600px) rotate(360deg); opacity:0}
+    0%{transform:translateY(-50px) rotate(0deg) translateX(0);opacity:1}
+    50%{transform:translateY(50vh) rotate(180deg) translateX(-30px)}
+    100%{transform:translateY(110vh) rotate(360deg) translateX(0);opacity:0}
 }
 
 .intro.hide{
     opacity:0;
     visibility:hidden;
+    pointer-events:none;
 }
 
 /* ================= MAIN ================= */
 
+/*
+  FIX CHÍNH: Bỏ height cố định trên container.
+  Dùng min-height trên text để giữ chỗ cho text khi đang gõ dần,
+  tránh ảnh bị đẩy lên che text.
+*/
+.page-wrap{
+    min-height:100vh;
+    min-height:-webkit-fill-available;
+    display:-webkit-flex;
+    display:flex;
+    -webkit-justify-content:center;
+    justify-content:center;
+    -webkit-align-items:flex-start;
+    align-items:flex-start;
+    padding:clamp(16px,4vw,30px) clamp(12px,3vw,20px);
+}
+
 .container{
     opacity:0;
+    -webkit-transition:1.5s ease;
     transition:1.5s ease;
     text-align:center;
-    width:92%;
+    width:100%;
     max-width:900px;
-    padding:clamp(20px,4vh,50px);
-    height:90vh;
+
+    padding:max(env(safe-area-inset-top,0px), clamp(24px,5vw,50px))
+            clamp(16px,4vw,40px)
+            max(env(safe-area-inset-bottom,0px), clamp(24px,5vw,50px));
+
+    display:-webkit-flex;
     display:flex;
+    -webkit-flex-direction:column;
     flex-direction:column;
-    justify-content:center;
+    -webkit-align-items:center;
+    align-items:center;
+
+    -webkit-backdrop-filter:blur(15px);
     backdrop-filter:blur(15px);
     background:rgba(255,255,255,0.15);
     border-radius:30px;
     box-shadow:0 0 80px rgba(255,20,147,0.7);
+
+    overflow-y:auto;
+    -webkit-overflow-scrolling:touch;
 }
 
 .container.show{opacity:1}
 
 h1{
-    font-size:clamp(22px,5vh,40px);
-    margin-bottom:clamp(15px,2vh,25px);
+    font-size:clamp(22px,5vw,40px);
+    margin-bottom:clamp(12px,2.5vw,20px);
+    -webkit-flex-shrink:0;
+    flex-shrink:0;
 }
 
+/* min-height giữ chỗ, tránh layout nhảy khi text chưa đầy */
 .text{
-    font-size:clamp(14px,2.8vh,22px);
-    line-height:1.6;
-    min-height:clamp(120px,25vh,220px);
+    font-size:clamp(14px,4vw,20px);
+    line-height:1.7;
+    min-height:clamp(200px,42vw,300px);
+    width:100%;
+    -webkit-flex-shrink:0;
+    flex-shrink:0;
+    text-align:center;
+    padding:0 clamp(4px,1vw,10px);
 }
 
-.cursor{animation:blink 1s infinite}
+.cursor{
+    -webkit-animation:blink 1s infinite;
+    animation:blink 1s infinite;
+}
+@-webkit-keyframes blink{0%,50%,100%{opacity:1}25%,75%{opacity:0}}
 @keyframes blink{0%,50%,100%{opacity:1}25%,75%{opacity:0}}
 
 .images{
-    margin-top:clamp(20px,3vh,40px);
+    margin-top:clamp(16px,3vw,30px);
+    display:-webkit-flex;
     display:flex;
+    -webkit-justify-content:center;
     justify-content:center;
-    gap:clamp(20px,5vw,60px);
+    gap:clamp(16px,4vw,40px);
+    -webkit-flex-shrink:0;
+    flex-shrink:0;
 }
 
 .images img{
-    width:clamp(100px,20vh,220px);
-    height:clamp(100px,20vh,220px);
+    width:clamp(90px,20vw,180px);
+    height:clamp(90px,20vw,180px);
+    -webkit-object-fit:cover;
     object-fit:cover;
-    border-radius:25px;
+    border-radius:20px;
+    -webkit-transition:0.6s;
     transition:0.6s;
-    box-shadow:0 20px 40px rgba(0,0,0,0.3);
+    box-shadow:0 15px 35px rgba(0,0,0,0.3);
+    -webkit-transform:translateZ(0);
+    transform:translateZ(0);
+    display:block;
 }
 
-.images img:hover{transform:scale(1.08)}
+.images img:hover,
+.images img:active{
+    -webkit-transform:scale(1.08);
+    transform:scale(1.08);
+}
+
+@media(max-width:480px){
+    .images img{
+        width:clamp(110px,38vw,150px);
+        height:clamp(110px,38vw,150px);
+    }
+}
 
 button{
-    margin-top:clamp(20px,3vh,40px);
-    padding:clamp(10px,2vh,15px) clamp(25px,4vh,45px);
-    font-size:clamp(14px,2.5vh,18px);
+    margin-top:clamp(16px,3vw,30px);
+    padding:clamp(10px,2.5vw,14px) clamp(28px,6vw,45px);
+    font-size:max(16px, clamp(14px,3.5vw,18px));
     border:none;
     border-radius:40px;
+    background:-webkit-linear-gradient(45deg,#ff4d88,#ff99ac);
     background:linear-gradient(45deg,#ff4d88,#ff99ac);
     color:white;
     cursor:pointer;
+    -webkit-transition:0.4s;
     transition:0.4s;
+    -webkit-appearance:none;
+    appearance:none;
+    font-family:'Playfair Display', serif;
+    touch-action:manipulation;
+    -webkit-flex-shrink:0;
+    flex-shrink:0;
+    box-shadow:0 8px 25px rgba(255,77,136,0.5);
 }
 
-button:hover{transform:scale(1.1)}
+button:hover,button:active{
+    -webkit-transform:scale(1.1);
+    transform:scale(1.1);
+}
+
+/* ================= FINAL ================= */
 
 .final-screen{
     position:fixed;
-    inset:0;
+    top:0;left:0;right:0;bottom:0;
     background:radial-gradient(circle,#ff4d88,#c9184a);
+    display:-webkit-flex;
     display:flex;
+    -webkit-flex-direction:column;
     flex-direction:column;
+    -webkit-justify-content:center;
     justify-content:center;
+    -webkit-align-items:center;
     align-items:center;
     text-align:center;
+    padding:clamp(20px,5vw,40px);
     opacity:0;
     visibility:hidden;
+    -webkit-transition:1s ease;
     transition:1s ease;
     z-index:20;
 }
@@ -215,141 +336,185 @@ button:hover{transform:scale(1.1)}
 }
 
 .final-screen h1{
-    font-size:clamp(24px,6vh,42px);
-    margin-bottom:20px;
+    font-size:clamp(22px,6vw,42px);
+    margin-bottom:16px;
+}
+
+.final-screen p{
+    font-size:clamp(14px,4vw,20px);
 }
 </style>
 </head>
 
 <body>
 
+<!-- INTRO -->
 <div class="intro" id="intro">
     <div class="aura"></div>
     <div class="ring"></div>
-    <svg class="heart-svg" onclick="openLove()" viewBox="0 0 32 29.6">
+    <svg class="heart-svg" id="heartBtn" viewBox="0 0 32 29.6" role="button" aria-label="Mở thư tình">
         <path fill="#ff1e56" d="M23.6,0c-3.4,0-6.4,2-7.6,5C14.8,2,11.8,0,8.4,0
         C3.8,0,0,3.8,0,8.4c0,9.5,16,21.2,16,21.2s16-11.7,16-21.2
         C32,3.8,28.2,0,23.6,0z"/>
     </svg>
 </div>
 
-<div class="container" id="main">
-    <h1>Gửi Em 💖</h1>
-    <div class="text">
-        <span id="typing"></span><span class="cursor">|</span>
-    </div>
+<!-- MAIN -->
+<div class="page-wrap">
+    <div class="container" id="main">
+        <h1>Gửi Em 💖</h1>
 
-    <div class="images">
-        <img src="anh.jpg">
-        <img src="em.jpg">
-    </div>
+        <div class="text">
+            <span id="typing"></span><span class="cursor">|</span>
+        </div>
 
-    <button onclick="acceptedLove()">Đồng ý 💕</button>
+        <div class="images">
+            <img src="anh.jpg" alt="Ảnh anh">
+            <img src="em.jpg" alt="Ảnh em">
+        </div>
+
+        <button id="acceptBtn">Đồng ý 💕</button>
+    </div>
 </div>
 
+<!-- FINAL -->
 <div class="final-screen" id="finalScreen">
     <h1>Chính thức thuộc về nhau rồi 💍</h1>
     <p>Từ hôm nay, anh có danh phận nhé 😌💗</p>
 </div>
 
-<audio id="bgMusic" loop>
+<!-- AUDIO -->
+<audio id="bgMusic" loop preload="none">
     <source src="music.mp3" type="audio/mpeg">
 </audio>
 
 <script>
-setInterval(()=>{shootHearts();shootSparkles();},1200);
+// ===== HEART BTN =====
+var heartBtn = document.getElementById("heartBtn");
+var _opened = false;
+
+heartBtn.addEventListener("touchend", function(e){
+    e.preventDefault();
+    if(!_opened){ _opened=true; openLove(); }
+});
+heartBtn.addEventListener("click", function(){
+    if(!_opened){ _opened=true; openLove(); }
+});
+
+document.getElementById("acceptBtn").addEventListener("click", acceptedLove);
+document.getElementById("acceptBtn").addEventListener("touchend", function(e){
+    e.preventDefault();
+    acceptedLove();
+});
+
+// ===== EFFECTS ON INTRO =====
+setInterval(function(){ shootHearts(); shootSparkles(); }, 1200);
 
 function shootHearts(){
-    const intro=document.getElementById("intro");
-    for(let i=0;i<12;i++){
-        let h=document.createElement("div");
-        h.className="flying-heart";
-        h.innerHTML="💗";
-        h.style.left="50%";
-        h.style.top="50%";
-        let angle=Math.random()*2*Math.PI;
-        let distance=150+Math.random()*200;
-        h.style.setProperty("--x",Math.cos(angle)*distance+"px");
-        h.style.setProperty("--y",Math.sin(angle)*distance+"px");
+    var intro = document.getElementById("intro");
+    for(var i=0; i<12; i++){
+        var h = document.createElement("div");
+        h.className = "flying-heart";
+        h.innerHTML = "💗";
+        h.style.left = "50%";
+        h.style.top = "50%";
+        var angle = Math.random()*2*Math.PI;
+        var dist = 150 + Math.random()*200;
+        h.style.setProperty("--x", Math.cos(angle)*dist+"px");
+        h.style.setProperty("--y", Math.sin(angle)*dist+"px");
         intro.appendChild(h);
-        setTimeout(()=>h.remove(),1600);
+        setTimeout(function(el){ el.remove(); }, 1600, h);
     }
 }
 
 function shootSparkles(){
-    const intro=document.getElementById("intro");
-    for(let i=0;i<15;i++){
-        let s=document.createElement("div");
-        s.className="sparkle";
-        s.style.left="50%";
-        s.style.top="50%";
-        let angle=Math.random()*2*Math.PI;
-        let distance=200+Math.random()*200;
-        s.style.setProperty("--x",Math.cos(angle)*distance+"px");
-        s.style.setProperty("--y",Math.sin(angle)*distance+"px");
+    var intro = document.getElementById("intro");
+    for(var i=0; i<15; i++){
+        var s = document.createElement("div");
+        s.className = "sparkle";
+        s.style.left = "50%";
+        s.style.top = "50%";
+        var angle = Math.random()*2*Math.PI;
+        var dist = 200 + Math.random()*200;
+        s.style.setProperty("--x", Math.cos(angle)*dist+"px");
+        s.style.setProperty("--y", Math.sin(angle)*dist+"px");
         intro.appendChild(s);
-        setTimeout(()=>s.remove(),2000);
+        setTimeout(function(el){ el.remove(); }, 2000, s);
     }
 }
 
-setInterval(()=>{
-    let p=document.createElement("div");
-    p.className="petal";
-    p.innerHTML="🌸";
-    p.style.left=Math.random()*100+"vw";
+// Cánh hoa rụng liên tục
+setInterval(function(){
+    var p = document.createElement("div");
+    p.className = "petal";
+    p.innerHTML = "🌸";
+    p.style.left = Math.random()*100+"vw";
+    p.style.top = "0";
+    p.style.animationDuration = (3 + Math.random()*2)+"s";
     document.body.appendChild(p);
-    setTimeout(()=>p.remove(),4000);
-},800);
+    setTimeout(function(){ p.remove(); }, 5000);
+}, 800);
 
+// ===== OPEN LOVE =====
 function openLove(){
     document.getElementById("intro").classList.add("hide");
     document.getElementById("main").classList.add("show");
-    document.getElementById("bgMusic").play();
+
+    var bgm = document.getElementById("bgMusic");
+    var promise = bgm.play();
+    if(promise !== undefined) promise.catch(function(){});
+
     typeEffect();
 }
 
-const message=[
-"Ngày anh xin phép cả thế giới để làm quen em…",
-"anh không ngờ rằng mình sẽ thích em nhiều đến vậy.",
-"Mọi thứ bắt đầu chỉ từ một lời chào,",
-"nhưng cảm xúc của anh thì không còn đơn giản như thế nữa.",
-"Càng nói chuyện với em, anh càng chắc rằng",
-"đây không phải là rung động nhất thời, mà là điều anh thật sự nghiêm túc.",
-"Hôm nay anh không xin phép thế giới nữa.",
-"Anh chỉ xin phép em —",
-"cho anh làm người yêu em.",
-"Em đồng ý chứ? 💗"
+// ===== TYPING =====
+var message = [
+    "Ngày anh xin phép cả thế giới để làm quen em…",
+    "anh không ngờ rằng mình sẽ thích em nhiều đến vậy.",
+    "Mọi thứ bắt đầu chỉ từ một lời chào,",
+    "nhưng cảm xúc của anh thì không còn đơn giản như thế nữa.",
+    "Càng nói chuyện với em, anh càng chắc rằng",
+    "đây không phải là rung động nhất thời, mà là điều anh thật sự nghiêm túc.",
+    "Hôm nay anh không xin phép thế giới nữa.",
+    "Anh chỉ xin phép em —",
+    "cho anh làm người yêu em.",
+    "Em đồng ý chứ? 💗"
 ];
 
-let line=0,char=0;
+var line = 0, char = 0;
 function typeEffect(){
-    const t=document.getElementById("typing");
-    if(line<message.length){
-        if(char<message[line].length){
-            t.innerHTML+=message[line].charAt(char);
+    var t = document.getElementById("typing");
+    if(line < message.length){
+        if(char < message[line].length){
+            t.innerHTML += message[line].charAt(char);
             char++;
-            setTimeout(typeEffect,40);
-        }else{
-            t.innerHTML+="<br>";
-            line++;char=0;
-            setTimeout(typeEffect,600);
+            setTimeout(typeEffect, 40);
+        } else {
+            t.innerHTML += "<br>";
+            line++; char = 0;
+            setTimeout(typeEffect, 600);
         }
     }
 }
 
+// ===== ACCEPT =====
 function acceptedLove(){
-    for(let i=0;i<60;i++){
-        let h=document.createElement("div");
-        h.className="flying-heart";
-        h.innerHTML="💖";
-        h.style.left=Math.random()*100+"vw";
-        h.style.top=Math.random()*100+"vh";
-        h.style.setProperty("--x",(Math.random()-0.5)*600+"px");
-        h.style.setProperty("--y",(Math.random()-0.5)*600+"px");
+    for(var i=0; i<60; i++){
+        var h = document.createElement("div");
+        h.className = "flying-heart";
+        h.innerHTML = "💖";
+        h.style.position = "fixed";
+        h.style.left = Math.random()*100+"vw";
+        h.style.top = Math.random()*100+"vh";
+        h.style.setProperty("--x", (Math.random()-0.5)*600+"px");
+        h.style.setProperty("--y", (Math.random()-0.5)*600+"px");
+        h.style.zIndex = "15";
         document.body.appendChild(h);
-        setTimeout(()=>h.remove(),2000);
+        setTimeout(function(el){ el.remove(); }, 2000, h);
     }
-    setTimeout(()=>{document.getElementById("finalScreen").classList.add("show");},800);
+    setTimeout(function(){
+        document.getElementById("finalScreen").classList.add("show");
+    }, 800);
 }
 </script>
 
